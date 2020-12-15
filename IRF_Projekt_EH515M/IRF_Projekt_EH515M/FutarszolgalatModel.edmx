@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FutarszolgalatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Étterem">
+          <Key>
+            <PropertyRef Name="ÉtteremSK" />
+          </Key>
+          <Property Name="ÉtteremSK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Név" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefonszám" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Futár">
+          <Key>
+            <PropertyRef Name="FutárSK" />
+          </Key>
+          <Property Name="FutárSK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Név" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Foglalt" Type="bit" Nullable="false" />
+          <Property Name="Telefonszám" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Jármű" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rendelés">
+          <Key>
+            <PropertyRef Name="RendelésID" />
+          </Key>
+          <Property Name="RendelésID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ár" Type="int" Nullable="false" />
+          <Property Name="Rögzítés" Type="datetime" Nullable="false" />
+          <Property Name="Elfogadva" Type="datetime" Nullable="false" />
+          <Property Name="Felvéve" Type="datetime" Nullable="false" />
+          <Property Name="Leadva" Type="datetime" Nullable="false" />
+          <Property Name="Késés" Type="int" Nullable="false" />
+          <Property Name="FutárFK" Type="int" Nullable="false" />
+          <Property Name="ÉtteremFK" Type="int" Nullable="false" />
+          <Property Name="Aktív" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Rendelés_ToÉtterem">
+          <End Role="Étterem" Type="Self.Étterem" Multiplicity="1" />
+          <End Role="Rendelés" Type="Self.Rendelés" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Étterem">
+              <PropertyRef Name="ÉtteremSK" />
+            </Principal>
+            <Dependent Role="Rendelés">
+              <PropertyRef Name="ÉtteremFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rendelés_ToFutár">
+          <End Role="Futár" Type="Self.Futár" Multiplicity="1" />
+          <End Role="Rendelés" Type="Self.Rendelés" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Futár">
+              <PropertyRef Name="FutárSK" />
+            </Principal>
+            <Dependent Role="Rendelés">
+              <PropertyRef Name="FutárFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FutarszolgalatModelStoreContainer">
+          <EntitySet Name="Étterem" EntityType="Self.Étterem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Futár" EntityType="Self.Futár" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rendelés" EntityType="Self.Rendelés" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Rendelés_ToÉtterem" Association="Self.FK_Rendelés_ToÉtterem">
+            <End Role="Étterem" EntitySet="Étterem" />
+            <End Role="Rendelés" EntitySet="Rendelés" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rendelés_ToFutár" Association="Self.FK_Rendelés_ToFutár">
+            <End Role="Futár" EntitySet="Futár" />
+            <End Role="Rendelés" EntitySet="Rendelés" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FutarszolgalatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Étterem">
+          <Key>
+            <PropertyRef Name="ÉtteremSK" />
+          </Key>
+          <Property Name="ÉtteremSK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Név" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Telefonszám" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Rendelés" Relationship="Self.FK_Rendelés_ToÉtterem" FromRole="Étterem" ToRole="Rendelés" />
+        </EntityType>
+        <EntityType Name="Futár">
+          <Key>
+            <PropertyRef Name="FutárSK" />
+          </Key>
+          <Property Name="FutárSK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Név" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Foglalt" Type="Boolean" Nullable="false" />
+          <Property Name="Telefonszám" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Jármű" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Rendelés" Relationship="Self.FK_Rendelés_ToFutár" FromRole="Futár" ToRole="Rendelés" />
+        </EntityType>
+        <EntityType Name="Rendelés">
+          <Key>
+            <PropertyRef Name="RendelésID" />
+          </Key>
+          <Property Name="RendelésID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ár" Type="Int32" Nullable="false" />
+          <Property Name="Rögzítés" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Elfogadva" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Felvéve" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Leadva" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Késés" Type="Int32" Nullable="false" />
+          <Property Name="FutárFK" Type="Int32" Nullable="false" />
+          <Property Name="ÉtteremFK" Type="Int32" Nullable="false" />
+          <Property Name="Aktív" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Étterem" Relationship="Self.FK_Rendelés_ToÉtterem" FromRole="Rendelés" ToRole="Étterem" />
+          <NavigationProperty Name="Futár" Relationship="Self.FK_Rendelés_ToFutár" FromRole="Rendelés" ToRole="Futár" />
+        </EntityType>
+        <Association Name="FK_Rendelés_ToÉtterem">
+          <End Role="Étterem" Type="Self.Étterem" Multiplicity="1" />
+          <End Role="Rendelés" Type="Self.Rendelés" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Étterem">
+              <PropertyRef Name="ÉtteremSK" />
+            </Principal>
+            <Dependent Role="Rendelés">
+              <PropertyRef Name="ÉtteremFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rendelés_ToFutár">
+          <End Role="Futár" Type="Self.Futár" Multiplicity="1" />
+          <End Role="Rendelés" Type="Self.Rendelés" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Futár">
+              <PropertyRef Name="FutárSK" />
+            </Principal>
+            <Dependent Role="Rendelés">
+              <PropertyRef Name="FutárFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FutarszolgalatEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Étterem" EntityType="Self.Étterem" />
+          <EntitySet Name="Futár" EntityType="Self.Futár" />
+          <EntitySet Name="Rendelés" EntityType="Self.Rendelés" />
+          <AssociationSet Name="FK_Rendelés_ToÉtterem" Association="Self.FK_Rendelés_ToÉtterem">
+            <End Role="Étterem" EntitySet="Étterem" />
+            <End Role="Rendelés" EntitySet="Rendelés" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rendelés_ToFutár" Association="Self.FK_Rendelés_ToFutár">
+            <End Role="Futár" EntitySet="Futár" />
+            <End Role="Rendelés" EntitySet="Rendelés" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FutarszolgalatModelStoreContainer" CdmEntityContainer="FutarszolgalatEntities">
+          <EntitySetMapping Name="Étterem">
+            <EntityTypeMapping TypeName="FutarszolgalatModel.Étterem">
+              <MappingFragment StoreEntitySet="Étterem">
+                <ScalarProperty Name="ÉtteremSK" ColumnName="ÉtteremSK" />
+                <ScalarProperty Name="Név" ColumnName="Név" />
+                <ScalarProperty Name="Telefonszám" ColumnName="Telefonszám" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Futár">
+            <EntityTypeMapping TypeName="FutarszolgalatModel.Futár">
+              <MappingFragment StoreEntitySet="Futár">
+                <ScalarProperty Name="FutárSK" ColumnName="FutárSK" />
+                <ScalarProperty Name="Név" ColumnName="Név" />
+                <ScalarProperty Name="Foglalt" ColumnName="Foglalt" />
+                <ScalarProperty Name="Telefonszám" ColumnName="Telefonszám" />
+                <ScalarProperty Name="Jármű" ColumnName="Jármű" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rendelés">
+            <EntityTypeMapping TypeName="FutarszolgalatModel.Rendelés">
+              <MappingFragment StoreEntitySet="Rendelés">
+                <ScalarProperty Name="RendelésID" ColumnName="RendelésID" />
+                <ScalarProperty Name="Ár" ColumnName="Ár" />
+                <ScalarProperty Name="Rögzítés" ColumnName="Rögzítés" />
+                <ScalarProperty Name="Elfogadva" ColumnName="Elfogadva" />
+                <ScalarProperty Name="Felvéve" ColumnName="Felvéve" />
+                <ScalarProperty Name="Leadva" ColumnName="Leadva" />
+                <ScalarProperty Name="Késés" ColumnName="Késés" />
+                <ScalarProperty Name="FutárFK" ColumnName="FutárFK" />
+                <ScalarProperty Name="ÉtteremFK" ColumnName="ÉtteremFK" />
+                <ScalarProperty Name="Aktív" ColumnName="Aktív" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
