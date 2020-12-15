@@ -71,14 +71,20 @@ namespace IRF_Projekt_EH515M
 
             context.Rendelés.Add(ujrendeles);
 
+            var query = from futar in context.Futár
+                        where futar.FutárSK == ujrendeles.FutárFK
+                        select futar;
+
+            foreach (Futár fut in query)
+            {
+                fut.Foglalt = true;
+            }
+            
             context.SaveChanges();
 
-            // Query for the entity.
-            var futar = context.Futár.Single(e => e.FutárSK == ujrendeles.FutárFK);
+            
 
-                // Entity is now tracked. Make a change to it.
-            futar.Foglalt = true;
-            context.SaveChanges();
+
 
 
             KeresesBetoltes();

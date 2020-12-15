@@ -26,7 +26,7 @@ namespace IRF_Projekt_EH515M
         }
     
         public virtual DbSet<Étterem> Étterem { get; set; }
-        public virtual DbSet<Futár> Futár { get; set; }
         public virtual DbSet<Rendelés> Rendelés { get; set; }
+        public virtual DbSet<Futár> Futár { get; set; }
     }
 }
