@@ -22,7 +22,22 @@ namespace IRF_Projekt_EH515M
             context.Rendelés.Load();
             context.Futár.Load();
             context.Étterem.Load();
+            Startup();
             KeresesBetoltes();
+            
+
+        }
+
+        private void Startup()
+        {
+
+
+
+            foreach (Futár f in context.Futár)
+            {
+                f.Foglalt = false;
+            }
+            context.SaveChanges();
         }
 
         private void KeresesBetoltes()
@@ -70,7 +85,7 @@ namespace IRF_Projekt_EH515M
             ujrendeles.ÉtteremFK = random.Next(1, étteremszám + 1);
 
             context.Rendelés.Add(ujrendeles);
-
+            
             var query = from futar in context.Futár
                         where futar.FutárSK == ujrendeles.FutárFK
                         select futar;
@@ -79,14 +94,26 @@ namespace IRF_Projekt_EH515M
             {
                 fut.Foglalt = true;
             }
+            try
+            {
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             
-            context.SaveChanges();
-
-            
-
-
-
-
             KeresesBetoltes();
 
             
