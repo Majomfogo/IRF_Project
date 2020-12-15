@@ -129,7 +129,16 @@ namespace IRF_Projekt_EH515M
                         int futarid = Convert.ToInt32(txtFutar.Text);
                         dataGridView1.DataSource = (from x in context.Rendelés
                                                     where x.FutárFK == futarid
-                                                    select x).ToList();
+                                                    select new
+                                                    {
+                                                       x.RendelésID,
+                                                       x.Ár,
+                                                       x.FutárFK,
+                                                       x.Futár.Név,
+                                                       x.Felvéve,
+                                                       x.ÉtteremFK,
+                                                       Hely = x.Étterem.Név
+                                                    }).ToList();
                     }
                     catch (Exception)
                     {
