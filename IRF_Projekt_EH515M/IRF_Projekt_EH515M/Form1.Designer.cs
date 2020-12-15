@@ -75,6 +75,7 @@ namespace IRF_Projekt_EH515M
             this.txtFutar.Name = "txtFutar";
             this.txtFutar.Size = new System.Drawing.Size(100, 22);
             this.txtFutar.TabIndex = 3;
+            this.txtFutar.TextChanged += new System.EventHandler(this.txtFutar_TextChanged);
             // 
             // label2
             // 

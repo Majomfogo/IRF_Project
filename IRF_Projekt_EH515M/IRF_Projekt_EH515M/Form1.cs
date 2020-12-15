@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -74,8 +75,8 @@ namespace IRF_Projekt_EH515M
             {
                 var szabad = from x in context.Futár
                              where x.Foglalt == false
-                             select x.FutárSK;
-                ujrendeles.FutárFK = szabad.First();
+                             select x;
+                ujrendeles.FutárFK = szabad.First().FutárSK;
             }
             catch (Exception)
             {
@@ -94,16 +95,7 @@ namespace IRF_Projekt_EH515M
             {
                 fut.Foglalt = true;
             }
-            try
-            {
-
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            
             try
             {
                 context.SaveChanges();
@@ -115,11 +107,41 @@ namespace IRF_Projekt_EH515M
             }
             
             KeresesBetoltes();
+            
+        }
 
+        private void txtFutar_TextChanged(object sender, EventArgs e)
+        {
+
+            Regex regex1 = new Regex("^[0-9]{0,6}$");
             
 
+            if (!regex1.IsMatch(txtFutar.Text))
+            {
+                MessageBox.Show("Betű vagy túl sok számjegyhasználata!");
+            }
+            else
+            {
+                if (!String.IsNullOrWhiteSpace(txtFutar.Text))
+                {
+                    try
+                    {
+                        int futarid = Convert.ToInt32(txtFutar.Text);
+                        dataGridView1.DataSource = (from x in context.Rendelés
+                                                    where x.FutárFK == futarid
+                                                    select x).ToList();
+                    }
+                    catch (Exception)
+                    {
 
-
+                        return;
+                    }
+                }
+               
+            }
+            
+            
+             
         }
     }
 }
