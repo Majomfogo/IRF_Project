@@ -70,6 +70,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Ellipszis.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Entities\Epito.cs" />
+    <Compile Include="Entities\Vonal.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

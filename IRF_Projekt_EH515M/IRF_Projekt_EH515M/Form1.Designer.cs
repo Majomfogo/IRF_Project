@@ -42,6 +42,7 @@ namespace IRF_Projekt_EH515M
             this.btnTimerStart = new System.Windows.Forms.Button();
             this.btnTimerStop = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.panelStatus = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,6 +65,7 @@ namespace IRF_Projekt_EH515M
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.Size = new System.Drawing.Size(1059, 332);
             this.dataGridView1.TabIndex = 1;
+            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
             // label1
             // 
@@ -150,11 +152,19 @@ namespace IRF_Projekt_EH515M
             this.label4.TabIndex = 10;
             this.label4.Text = "Rendelések automatikus betétele";
             // 
+            // panelStatus
+            // 
+            this.panelStatus.Location = new System.Drawing.Point(356, 95);
+            this.panelStatus.Name = "panelStatus";
+            this.panelStatus.Size = new System.Drawing.Size(715, 135);
+            this.panelStatus.TabIndex = 11;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1096, 605);
+            this.Controls.Add(this.panelStatus);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnTimerStop);
             this.Controls.Add(this.btnTimerStart);
@@ -188,6 +198,7 @@ namespace IRF_Projekt_EH515M
         private System.Windows.Forms.Button btnTimerStart;
         private System.Windows.Forms.Button btnTimerStop;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel panelStatus;
     }
 }
 

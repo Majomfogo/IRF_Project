@@ -9,17 +9,21 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using IRF_Projekt_EH515M.Entities;
 
 
 namespace IRF_Projekt_EH515M
 {
+
     public partial class Form1 : Form
     {
+        public Epito Epit;
         private Random random = new Random();
         FutarszolgalatEntities context = new FutarszolgalatEntities();
         public Form1()
         {
             InitializeComponent();
+            
             context.Rendelés.Load();
             context.Futár.Load();
             context.Étterem.Load();
@@ -241,7 +245,35 @@ namespace IRF_Projekt_EH515M
 
         private void btnTimerStop_Click(object sender, EventArgs e)
         {
-            timer1.Enabled = false;
+            timer1.Enabled = false;           
+        }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            Epit = new Epito();
+            var elfogadva = Epit.CreateNewKor();
+            panelStatus.Controls.Add(elfogadva);
+            elfogadva.Top = 50;
+
+            var elfogadvavonal = Epit.CreateNewVonal();
+            panelStatus.Controls.Add(elfogadvavonal);
+            elfogadvavonal.Top = 62;
+            elfogadvavonal.Left = elfogadva.Left + 20;
+
+            var felveve = Epit.CreateNewKor();
+            panelStatus.Controls.Add(felveve);
+            felveve.Top = 50;
+            felveve.Left = 130;
+
+            var felvevevonal = Epit.CreateNewVonal();
+            panelStatus.Controls.Add(felvevevonal);
+            felvevevonal.Top = 62;
+            felvevevonal.Left = felveve.Left + 20;
+
+            var leadva = Epit.CreateNewKor();
+            panelStatus.Controls.Add(leadva);
+            leadva.Top = 50;
+            leadva.Left = 260;
         }
     }
 }
