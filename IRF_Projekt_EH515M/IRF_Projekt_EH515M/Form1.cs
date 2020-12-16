@@ -32,13 +32,16 @@ namespace IRF_Projekt_EH515M
         private void Startup()
         {
 
-
-
             foreach (Futár f in context.Futár)
             {
                 f.Foglalt = false;
             }
             context.SaveChanges();
+            comboEtterem.DataSource = context.Étterem.ToList();
+            comboEtterem.DisplayMember = "Név";
+            timer1.Enabled = true;
+            timer1.Interval = 1000;
+
         }
 
         private void KeresesBetoltes()
@@ -47,7 +50,8 @@ namespace IRF_Projekt_EH515M
                           select new
                           {
                               Rendelészám = x.RendelésID,
-                              Futárazonosító = x.FutárFK
+                              Futárazonosító = x.FutárFK,
+                              Aktív = x.Aktív
                           };
             dataGridView1.DataSource = kijelzo.ToList();
         }
@@ -119,6 +123,7 @@ namespace IRF_Projekt_EH515M
             if (!regex1.IsMatch(txtFutar.Text))
             {
                 MessageBox.Show("Betű vagy túl sok számjegyhasználata!");
+                txtFutar.Text = "";
             }
             else
             {
@@ -151,6 +156,92 @@ namespace IRF_Projekt_EH515M
             
             
              
+        }
+
+        private void txtRendeles_TextChanged(object sender, EventArgs e)
+        {
+            Regex regex2 = new Regex("^[0-9]{0,6}$");
+
+
+            if (!regex2.IsMatch(txtFutar.Text))
+            {
+                MessageBox.Show("Betű vagy túl sok számjegyhasználata!");
+                txtRendeles.Text = "";
+            }
+            else
+            {
+                if (!String.IsNullOrWhiteSpace(txtRendeles.Text))
+                {
+                    try
+                    {
+                        int rendelesid = Convert.ToInt32(txtRendeles.Text);
+                        dataGridView1.DataSource = (from x in context.Rendelés
+                                                    where x.RendelésID == rendelesid
+                                                    select new
+                                                    {
+                                                        x.RendelésID,
+                                                        x.Ár,
+                                                        x.FutárFK,
+                                                        x.Futár.Név,
+                                                        x.Felvéve,
+                                                        x.ÉtteremFK,
+                                                        Hely = x.Étterem.Név
+                                                    }).ToList();
+                    }
+                    catch (Exception)
+                    {
+
+                        MessageBox.Show("hiba");
+                    }
+                }
+
+            }
+
+        }
+
+        private void comboEtterem_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Étterem etterem = (Étterem)comboEtterem.SelectedItem;
+            dataGridView1.DataSource = (from x in context.Rendelés
+                                        where x.ÉtteremFK == etterem.ÉtteremSK
+                                        select new
+                                        {
+                                            Hely = x.Étterem.Név,
+                                            x.RendelésID,
+                                            x.Aktív,
+                                            x.Ár,
+                                            x.FutárFK,
+                                            x.Futár.Név,
+                                            x.Felvéve,
+                                            x.ÉtteremFK
+                                            
+                                        }).ToList();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            foreach (Rendelés rend in context.Rendelés)
+            {
+                if ((rend.Aktív==true) && (rend.Leadva.AddSeconds(rend.Késés) < DateTime.Now))
+                { rend.Aktív = false;
+                    foreach (Futár fut in context.Futár)
+                    {
+                        if (fut.FutárSK == rend.FutárFK)
+                            fut.Foglalt = false;
+                    }
+                }
+            }
+            AddOrder();
+        }
+
+        private void btnTimerStart_Click(object sender, EventArgs e)
+        {
+            timer1.Enabled = true;
+        }
+
+        private void btnTimerStop_Click(object sender, EventArgs e)
+        {
+            timer1.Enabled = false;
         }
     }
 }
