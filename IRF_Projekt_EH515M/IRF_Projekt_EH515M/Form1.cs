@@ -10,6 +10,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using IRF_Projekt_EH515M.Entities;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Reflection;
 
 
 namespace IRF_Projekt_EH515M
@@ -17,9 +19,13 @@ namespace IRF_Projekt_EH515M
 
     public partial class Form1 : Form
     {
+        List<Rendelés> Rendelések;
         public Epito Epit;
         private Random random = new Random();
         FutarszolgalatEntities context = new FutarszolgalatEntities();
+        Excel.Application xlApp;
+        Excel.Workbook xlWB;
+        Excel.Worksheet xlSheet;
         public Form1()
         {
             InitializeComponent();
@@ -27,10 +33,9 @@ namespace IRF_Projekt_EH515M
             context.Rendelés.Load();
             context.Futár.Load();
             context.Étterem.Load();
+
             Startup();
             KeresesBetoltes();
-            
-
         }
 
         private void Startup()
@@ -307,6 +312,86 @@ namespace IRF_Projekt_EH515M
 
 
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //Munkalap megnyitása
+            try
+            {
+                Rendelések = context.Rendelés.ToList(); 
+                xlApp.Visible = true;
+                xlApp.UserControl = true;
+            }
+            catch (Exception ex)
+            {
+
+                string errMsg = string.Format("Error: {0}\nLine: {1}", ex.Message, ex.Source);
+                MessageBox.Show(errMsg, "Error");                
+                xlWB.Close(false, Type.Missing, Type.Missing);
+                xlApp.Quit();
+                xlWB = null;
+                xlApp = null;
+            }
+
+            //Fejléc
+            string[] headers = new string[] {
+                "Rendelésazonosító",
+                "Ár",
+                "Rögzítés ideje",
+                "Elfogadva",
+                "Felvétel ideje",
+                "Leadás várható ideje",
+                "Késés (perc)",
+                "Szállító futár azonosítója",
+                "Étterem azonosítója"};
+            xlSheet.Cells[1, 1] = headers[0];
+
+            //Adatok betöltése
+            object[,] values = new object[Rendelések.Count, headers.Length];
+            int counter = 0;
+            foreach (Rendelés r in Rendelések)
+            {
+                values[counter, 0] = r.RendelésID;
+                values[counter, 1] = r.Ár;
+                values[counter, 2] = r.Rögzítés;
+                values[counter, 3] = r.Elfogadva;
+                values[counter, 4] = r.Felvéve;
+                values[counter, 5] = r.Leadva;
+                values[counter, 6] = r.Késés;
+                values[counter, 7] = r.FutárFK;
+                values[counter, 8] = r.ÉtteremFK;                
+                counter++;
+                xlSheet.get_Range(
+                GetCell(2, 1),
+                GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
+                Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
+
+                //Formázás
+                headerRange.Font.Bold = true;
+                headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+                headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                headerRange.EntireColumn.AutoFit();
+                headerRange.RowHeight = 40;
+                headerRange.Interior.Color = Color.LightBlue;
+                headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+            }
+        }
+        private string GetCell(int x, int y)
+        {
+            string ExcelCoordinate = "";
+            int dividend = y;
+            int modulo;
+
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26;
+                ExcelCoordinate = Convert.ToChar(65 + modulo).ToString() + ExcelCoordinate;
+                dividend = (int)((dividend - modulo) / 26);
+            }
+            ExcelCoordinate += x.ToString();
+
+            return ExcelCoordinate;
         }
     }
 }
