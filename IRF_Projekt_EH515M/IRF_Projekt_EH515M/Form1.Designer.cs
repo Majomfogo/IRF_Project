@@ -43,11 +43,11 @@ namespace IRF_Projekt_EH515M
             this.btnTimerStop = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.panelStatus = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnExcel = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnCsv = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -164,15 +164,15 @@ namespace IRF_Projekt_EH515M
             this.panelStatus.Size = new System.Drawing.Size(461, 97);
             this.panelStatus.TabIndex = 11;
             // 
-            // button1
+            // btnExcel
             // 
-            this.button1.Location = new System.Drawing.Point(813, 40);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(118, 60);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "Rendelések exportálása excelbe";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnExcel.Location = new System.Drawing.Point(813, 40);
+            this.btnExcel.Name = "btnExcel";
+            this.btnExcel.Size = new System.Drawing.Size(118, 60);
+            this.btnExcel.TabIndex = 12;
+            this.btnExcel.Text = "Rendelések exportálása excelbe";
+            this.btnExcel.UseVisualStyleBackColor = true;
+            this.btnExcel.Click += new System.EventHandler(this.button1_Click);
             // 
             // label5
             // 
@@ -201,26 +201,26 @@ namespace IRF_Projekt_EH515M
             this.label7.TabIndex = 2;
             this.label7.Text = "Kiszállítva";
             // 
-            // button2
+            // btnCsv
             // 
-            this.button2.Location = new System.Drawing.Point(937, 40);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(134, 60);
-            this.button2.TabIndex = 13;
-            this.button2.Text = "Export .csv-be";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnCsv.Location = new System.Drawing.Point(937, 40);
+            this.btnCsv.Name = "btnCsv";
+            this.btnCsv.Size = new System.Drawing.Size(134, 60);
+            this.btnCsv.TabIndex = 13;
+            this.btnCsv.Text = "Export .csv-be";
+            this.btnCsv.UseVisualStyleBackColor = true;
+            this.btnCsv.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1096, 605);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btnCsv);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnExcel);
             this.Controls.Add(this.panelStatus);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnTimerStop);
@@ -256,11 +256,11 @@ namespace IRF_Projekt_EH515M
         private System.Windows.Forms.Button btnTimerStop;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panelStatus;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnExcel;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnCsv;
     }
 }
 
