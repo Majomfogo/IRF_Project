@@ -144,11 +144,11 @@ namespace IRF_Projekt_EH515M
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(534, 20);
+            this.label4.Location = new System.Drawing.Point(524, 20);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(201, 17);
+            this.label4.Size = new System.Drawing.Size(218, 17);
             this.label4.TabIndex = 10;
-            this.label4.Text = "Rendelések automata betétele";
+            this.label4.Text = "Rendelések automatikus betétele";
             // 
             // Form1
             // 
