@@ -73,9 +73,9 @@ namespace IRF_Projekt_EH515M
             Rendelés ujrendeles = new Rendelés();
             ujrendeles.Rögzítés = DateTime.Now;
             ujrendeles.Elfogadva = ujrendeles.Rögzítés;
-            ujrendeles.Felvéve = ujrendeles.Rögzítés.AddSeconds(random.Next(1, 16));
-            ujrendeles.Leadva = ujrendeles.Felvéve.AddSeconds(random.Next(1, 16));
-            ujrendeles.Késés = random.Next(1, 16);
+            ujrendeles.Felvéve = ujrendeles.Rögzítés.AddSeconds(random.Next(10, 16));
+            ujrendeles.Leadva = ujrendeles.Felvéve.AddSeconds(random.Next(10, 16));
+            ujrendeles.Késés = random.Next(0, 16);
             ujrendeles.Ár = random.Next(2000, 20000);
             ujrendeles.Aktív = true;
 
@@ -98,7 +98,7 @@ namespace IRF_Projekt_EH515M
             var query = from futar in context.Futár
                         where futar.FutárSK == ujrendeles.FutárFK
                         select futar;
-
+           
             foreach (Futár fut in query)
             {
                 fut.Foglalt = true;
@@ -245,35 +245,68 @@ namespace IRF_Projekt_EH515M
 
         private void btnTimerStop_Click(object sender, EventArgs e)
         {
-            timer1.Enabled = false;           
+            timer1.Enabled = false;            
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            Epit = new Epito();
-            var elfogadva = Epit.CreateNewKor();
-            panelStatus.Controls.Add(elfogadva);
-            elfogadva.Top = 50;
+            panelStatus.Controls.Clear();
 
-            var elfogadvavonal = Epit.CreateNewVonal();
-            panelStatus.Controls.Add(elfogadvavonal);
-            elfogadvavonal.Top = 62;
-            elfogadvavonal.Left = elfogadva.Left + 20;
+            int sorindex = dataGridView1.CurrentCell.RowIndex;
+            //int oszlopindex = dataGridView1.CurrentCell.ColumnIndex;
 
-            var felveve = Epit.CreateNewKor();
-            panelStatus.Controls.Add(felveve);
-            felveve.Top = 50;
-            felveve.Left = 130;
+            string kivalasztott=dataGridView1.Rows[sorindex].Cells[0].Value.ToString();
+            int id = Convert.ToInt32(kivalasztott);
 
-            var felvevevonal = Epit.CreateNewVonal();
-            panelStatus.Controls.Add(felvevevonal);
-            felvevevonal.Top = 62;
-            felvevevonal.Left = felveve.Left + 20;
+            var rendel = (from x in context.Rendelés
+                         where x.RendelésID == id
+                         select new
+                         {
+                             x.Elfogadva,
+                             x.Felvéve,
+                             x.Leadva,
+                             x.Késés
+                         }).ToList();
+                         
 
-            var leadva = Epit.CreateNewKor();
-            panelStatus.Controls.Add(leadva);
-            leadva.Top = 50;
-            leadva.Left = 260;
+
+            if (rendel.First().Elfogadva < DateTime.Now)
+            {
+                Epit = new Epito();
+                var elfogadva = Epit.CreateNewKor();
+                panelStatus.Controls.Add(elfogadva);
+                elfogadva.Top = 50;
+
+                var elfogadvavonal = Epit.CreateNewVonal();
+                panelStatus.Controls.Add(elfogadvavonal);
+                elfogadvavonal.Top = 62;
+                elfogadvavonal.Left = elfogadva.Left + 20;
+            }
+
+            if (rendel.First().Felvéve < DateTime.Now)
+            {
+                var felveve = Epit.CreateNewKor();
+                panelStatus.Controls.Add(felveve);
+                felveve.Top = 50;
+                felveve.Left = 130;
+
+                var felvevevonal = Epit.CreateNewVonal();
+                panelStatus.Controls.Add(felvevevonal);
+                felvevevonal.Top = 62;
+                felvevevonal.Left = felveve.Left + 20;
+            }
+
+            if (rendel.First().Leadva.AddSeconds(rendel.First().Késés) < DateTime.Now)
+            {
+                var leadva = Epit.CreateNewKor();
+                panelStatus.Controls.Add(leadva);
+                leadva.Top = 50;
+                leadva.Left = 260;
+            }
+
+
+
+
         }
     }
 }
