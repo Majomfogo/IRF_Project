@@ -12,7 +12,7 @@ using System.Windows.Forms;
 using IRF_Projekt_EH515M.Entities;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Reflection;
-
+using System.IO;
 
 namespace IRF_Projekt_EH515M
 {
@@ -62,6 +62,7 @@ namespace IRF_Projekt_EH515M
                               Rendelészám = x.RendelésID,
                               Futárazonosító = x.FutárFK,
                               Aktív = x.Aktív
+                              
                           };
             dataGridView1.DataSource = kijelzo.ToList();
         }
@@ -69,6 +70,7 @@ namespace IRF_Projekt_EH515M
         private void btnGenerate_Click(object sender, EventArgs e)
         {
             AddOrder();
+            KeresesBetoltes();
 
         }
 
@@ -120,7 +122,7 @@ namespace IRF_Projekt_EH515M
                 throw;
             }
             
-            KeresesBetoltes();
+            
             
         }
 
@@ -429,6 +431,59 @@ namespace IRF_Projekt_EH515M
             ExcelCoordinate += x.ToString();
 
             return ExcelCoordinate;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //CSV-be mentés
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.InitialDirectory = Application.StartupPath;
+            sfd.Filter = "Comma Separated Values (*.csv)|*.csv";
+            sfd.DefaultExt = "csv";
+            sfd.AddExtension = true;
+            if (sfd.ShowDialog() != DialogResult.OK) return;
+            
+            using (StreamWriter sw=new StreamWriter(sfd.FileName,false,Encoding.UTF8))
+            {
+                sw.Write("Rendelésazonosító");
+                sw.Write(";");
+                sw.Write("Ár");
+                sw.Write(";");
+                sw.Write("Rögzítés ideje");
+                sw.Write(";");
+                sw.Write("Elfogadás ideje");
+                sw.Write(";");
+                sw.Write("Felvétel ideje");
+                sw.Write(";");
+                sw.Write("Leadás ideje");
+                sw.Write(";");
+                sw.Write("Késés (perc)");
+                sw.Write(";");
+                sw.Write("Futárazonosító");
+                sw.Write(";");
+                sw.WriteLine("Étteremazonosító");
+
+                foreach (Rendelés s in context.Rendelés)
+                {                  
+                    sw.Write(s.RendelésID);
+                    sw.Write(";");
+                    sw.Write(s.Ár);
+                    sw.Write(";");
+                    sw.Write(s.Rögzítés.ToString());
+                    sw.Write(";");
+                    sw.Write(s.Elfogadva.ToString());
+                    sw.Write(";");
+                    sw.Write(s.Felvéve.ToString());
+                    sw.Write(";");
+                    sw.Write(s.Leadva.ToString());
+                    sw.Write(";");
+                    sw.Write(s.Késés);
+                    sw.Write(";");
+                    sw.Write(s.FutárFK);
+                    sw.Write(";");
+                    sw.WriteLine(s.ÉtteremFK);
+                }
+            }
         }
     }
 }
