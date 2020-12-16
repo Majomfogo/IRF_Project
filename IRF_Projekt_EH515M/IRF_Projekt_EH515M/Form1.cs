@@ -351,9 +351,7 @@ namespace IRF_Projekt_EH515M
                 xlApp.Quit();
                 xlWB = null;
                 xlApp = null;
-            }
-
-            CreateTable();
+            }            
         }
 
         private void CreateTable()
@@ -435,7 +433,7 @@ namespace IRF_Projekt_EH515M
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //CSV-be mentés
+            
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.InitialDirectory = Application.StartupPath;
             sfd.Filter = "Comma Separated Values (*.csv)|*.csv";
