@@ -263,7 +263,7 @@ namespace IRF_Projekt_EH515M
                 panelStatus.Controls.Clear();
 
                 int sorindex = dataGridView1.CurrentCell.RowIndex;
-                //int oszlopindex = dataGridView1.CurrentCell.ColumnIndex;
+                
 
                 string kivalasztott = dataGridView1.Rows[sorindex].Cells[0].Value.ToString();
                 int id = Convert.ToInt32(kivalasztott);
