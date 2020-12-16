@@ -18,18 +18,14 @@ namespace IRF_Projekt_EH515M.Entities
             Paint += Ellipszis_Paint1;
         }
 
-        
+
         private void Ellipszis_Paint1(object sender, PaintEventArgs e)
         {
-            DrawKerek(e.Graphics);
+            DrawKor(e.Graphics);
         }
 
-       
-        public void DrawVonal(Graphics g)
-        {
-            g.FillRectangle(new SolidBrush(Color.Green), 0, 0, 60, 20);
-        }
-        public void DrawKerek(Graphics g)
+
+        public void DrawKor(Graphics g)
         {
             g.FillEllipse(new SolidBrush(Color.Green), 0, 0, Width, Height);
         }

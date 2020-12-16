@@ -19,7 +19,7 @@ namespace IRF_Projekt_EH515M
 
     public partial class Form1 : Form
     {
-        List<Rendelés> Rendelések;
+        public List<Rendelés> Rendelések;
         public Epito Epit;
         private Random random = new Random();
         FutarszolgalatEntities context = new FutarszolgalatEntities();
@@ -316,10 +316,16 @@ namespace IRF_Projekt_EH515M
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Rendelések = context.Rendelés.ToList();
             //Munkalap megnyitása
             try
             {
-                Rendelések = context.Rendelés.ToList(); 
+                
+                xlApp = new Excel.Application();
+                xlWB = xlApp.Workbooks.Add(Missing.Value);
+                xlSheet = xlWB.ActiveSheet;
+                CreateTable();
+                
                 xlApp.Visible = true;
                 xlApp.UserControl = true;
             }
@@ -327,13 +333,18 @@ namespace IRF_Projekt_EH515M
             {
 
                 string errMsg = string.Format("Error: {0}\nLine: {1}", ex.Message, ex.Source);
-                MessageBox.Show(errMsg, "Error");                
+                MessageBox.Show(errMsg, "Error");
                 xlWB.Close(false, Type.Missing, Type.Missing);
                 xlApp.Quit();
                 xlWB = null;
                 xlApp = null;
             }
 
+            CreateTable();
+        }
+
+        private void CreateTable()
+        {
             //Fejléc
             string[] headers = new string[] {
                 "Rendelésazonosító",
@@ -345,7 +356,10 @@ namespace IRF_Projekt_EH515M
                 "Késés (perc)",
                 "Szállító futár azonosítója",
                 "Étterem azonosítója"};
-            xlSheet.Cells[1, 1] = headers[0];
+            for (int i = 1; i-1 < headers.Length; i++)
+            {
+                xlSheet.Cells[1, i] = headers[i - 1];
+            }
 
             //Adatok betöltése
             object[,] values = new object[Rendelések.Count, headers.Length];
@@ -360,8 +374,9 @@ namespace IRF_Projekt_EH515M
                 values[counter, 5] = r.Leadva;
                 values[counter, 6] = r.Késés;
                 values[counter, 7] = r.FutárFK;
-                values[counter, 8] = r.ÉtteremFK;                
+                values[counter, 8] = r.ÉtteremFK;
                 counter++;
+            }
                 xlSheet.get_Range(
                 GetCell(2, 1),
                 GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
@@ -375,8 +390,19 @@ namespace IRF_Projekt_EH515M
                 headerRange.RowHeight = 40;
                 headerRange.Interior.Color = Color.LightBlue;
                 headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
-            }
+
+                Excel.Range tableRange = xlSheet.get_Range(GetCell(1, 1), GetCell(Rendelések.Count + 1, headers.Length));
+                tableRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+                Excel.Range elsooszlopRange = xlSheet.get_Range(GetCell(2, 1), GetCell(Rendelések.Count + 1, 1));
+                elsooszlopRange.Font.Bold = true;
+                elsooszlopRange.Interior.Color = Color.LightYellow;
+               
+                
+                
+            
         }
+
         private string GetCell(int x, int y)
         {
             string ExcelCoordinate = "";
